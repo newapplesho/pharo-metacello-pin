@@ -8,8 +8,6 @@ SmalltalkCISpec {
     }
   ],
   #testing : {
-    #include : {
-      #packages : [ 'MetacelloPin-Tests' ]
-    }
+    #packages : [ 'MetacelloPin-Tests' ]
   }
 }

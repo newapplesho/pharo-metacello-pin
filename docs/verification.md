@@ -88,6 +88,8 @@ the SHA of the tag object.
   selection, the status line said "2 unpinned, 1 unsupported". After Pin, it said
   "2 pinned now, 1 unsupported" and that only the image changed, and Pin was disabled
   again.
+- On GitHub (PR #1), CI passed: the tests on Pharo 12, 13 and 14 with smalltalkCI, and
+  `metacello-pin help` and `check` on Pharo 13 and 14.
 - `make load` reports 0 errors and 0 warnings. We check the warnings too, because a Tonel
   parse failure shows up only as a warning, and the method is then missing without any
   error.
@@ -98,7 +100,7 @@ the SHA of the tag object.
 |-------|----------------------|
 | Zinc resends `Authorization` to another host on redirect; `followRedirects: false` stops it | Two local `ZnServer`s; covered by `MPinGitHubResolverTest` |
 | Dependabot updates the `# vX.Y.Z` comment next to a SHA pin | dependabot-core `version_commenter.rb` |
-| smalltalkCI accepts `#include : { #packages : [...] }` | smalltalkCI README |
+| smalltalkCI `#testing : { #packages : [...] }` runs only those packages, while `#include` adds them to the packages that the load spec already tests (with `#include`, CI ran every test twice) | smalltalkCI README; CI run of PR #1 |
 | smalltalkCI downloads a get.pharo.org script and runs it with `bash` | smalltalkCI `pharo/run.sh` |
 
 ## Not verified
@@ -114,5 +116,4 @@ the SHA of the tag object.
   	load
   ```
 
-- The CI workflow has not run on GitHub yet.
 - Nobody has used the GUI on screen, including the Save... file dialog.
