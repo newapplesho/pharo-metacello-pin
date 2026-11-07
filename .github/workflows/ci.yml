@@ -1,0 +1,64 @@
+name: ci
+
+run-name: "[${{ github.event.repository.name }}] Check: ${{ github.event_name == 'schedule' && 'scheduled' || github.event.pull_request.title || github.ref_name }}"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened]
+  schedule:
+    # Every Monday 06:00 JST (= Sunday 21:00 UTC; cron runs in UTC).
+    - cron: "0 21 * * 0"
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    timeout-minutes: 20
+    strategy:
+      matrix:
+        smalltalk: [ Pharo64-12, Pharo64-13, Pharo64-14 ]
+    name: ${{ matrix.smalltalk }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Smalltalk CI
+        uses: hpi-swa/setup-smalltalkCI@c0a3a3b942ac515b6c3846ca2f65802d353757ef # 1.6.3
+        with:
+          smalltalk-image: ${{ matrix.smalltalk }}
+      - name: Load Image and Run Tests
+        run: smalltalkci -s ${{ matrix.smalltalk }} .smalltalk.ston
+        timeout-minutes: 15
+
+  cli:
+    # Smoke-test the metacello-pin command line on this repository itself, the same way
+    # users run it (make setup / load / check). Pharo 14 has its own entry point (Clap).
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        pharo: [ "130", "140" ]
+    name: cli (Pharo ${{ matrix.pharo }})
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Download Pharo
+        run: make setup PHARO_VERSION=${{ matrix.pharo }}
+      - name: Load project
+        run: make load
+      - name: metacello-pin help
+        run: cd pharo-local && ./pharo --headless Pharo.image metacello-pin help
+      - name: metacello-pin check
+        run: make check
