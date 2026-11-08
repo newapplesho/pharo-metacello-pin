@@ -127,7 +127,17 @@ MPinCommand >> resolver [
 
 { #category : #running }
 MPinCommand >> run [
-	"Answer nil on success, or the message to fail with."
+	"Answer nil on success, or the message to fail with. An MPinError, such as a missing
+	directory or a GitHub error, becomes that message. Any other error is a bug, and I let
+	it through with its stack trace."
+
+	^ [ self runCommand ]
+		  on: MPinError
+		  do: [ :error | error return: error messageText ]
+]
+
+{ #category : #running }
+MPinCommand >> runCommand [
 
 	| command |
 	command := self positionalArguments

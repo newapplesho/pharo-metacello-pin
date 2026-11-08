@@ -21,6 +21,17 @@ MPinCommandTest >> testHelpSucceeds [
 ]
 
 { #category : #tests }
+MPinCommandTest >> testMissingDirectoryFailsWithMessage [
+
+	| directory |
+	directory := FileLocator imageDirectory / 'metacello-pin-no-such-directory'.
+	self deny: directory exists.
+	self
+		assert: (self commandOn: { 'check'. directory fullName }) run
+		equals: 'not a directory: ' , directory resolve fullName
+]
+
+{ #category : #tests }
 MPinCommandTest >> testOutputPath [
 
 	self assert: (self commandOn: #( 'lock' )) outputPath equals: 'metacello.lock.st'.

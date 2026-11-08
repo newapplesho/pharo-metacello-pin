@@ -32,7 +32,7 @@ MPinCommandLineHandler class >> priority [
 { #category : #activation }
 MPinCommandLineHandler >> activate [
 
-	(MPinCommand arguments: self arguments stdout: self stdout) run
+	(MPinCommand arguments: self commandLine arguments stdout: self stdout) run
 		ifNil: [ self exitSuccess ]
 		ifNotNil: [ :message | self exitFailure: message ]
 ]

@@ -21,7 +21,7 @@ load:   ## Load (or reload) the project into the Pharo image
 test:   ## Run tests headless
 	cd $(PHARO_DIR) && $(PHARO) test --junit-xml-output '$(TEST_PATTERN)'
 
-lint:   ## Run Pharo lint rules on the loaded project (exit 1 on a new finding)
+lint:   ## Run Pharo lint rules on the loaded project (exit 1 on a finding)
 	cd $(PHARO_DIR) && $(PHARO) st --quit ../scripts/lint.st
 
 ui:     ## Open the Pharo GUI (World menu > Library > Metacello Pin)

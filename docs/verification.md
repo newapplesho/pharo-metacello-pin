@@ -69,7 +69,7 @@ the SHA of the tag object.
 
 ## Images
 
-- We downloaded fresh images of Pharo 12.0, 13.1 and 14.0. On each, all 51 tests pass.
+- We downloaded fresh images of Pharo 12.0, 13.1 and 14.0. On each, all tests pass.
   We also ran the CLI on a copy of aws-sdk-smalltalk: `help`, an unknown command, `check`
   before and after `pin`, and `lock --output file`. All three versions gave the same exit
   codes.
@@ -93,6 +93,17 @@ the SHA of the tag object.
 - `make load` reports 0 errors and 0 warnings. We check the warnings too, because a Tonel
   parse failure shows up only as a warning, and the method is then missing without any
   error.
+- `make load` used to keep the `BaselineOfMetacelloPin` already in the image: after a
+  change to the class comment in `src/`, the image still had the old one.
+  `scripts/load-project.st` now calls `get` before `load`, and the image then had the new
+  comment on 12, 13 and 14.
+- `make lint` reports 0 findings on 12, 13 and 14. A class without a comment, added to the
+  image for the test, was reported and the command exited with status 1. On 14 the rules
+  also found that `MPinCommandLineHandler>>activate` sent `arguments`, which Pharo 14's
+  `CommandLineHandler` no longer has; it now sends `commandLine arguments`.
+- `metacello-pin check /nonexistent-dir` prints `not a directory: /nonexistent-dir` and
+  exits with status 1 on 12, 13 and 14. It used to print the `MPinError` with its stack
+  trace.
 
 ## Facts checked in other projects' sources
 

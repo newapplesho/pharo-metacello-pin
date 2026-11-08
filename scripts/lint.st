@@ -34,7 +34,8 @@ packages do: [ :package |
 			(ReCriticEngine critiquesOf: entity) do: [ :critique |
 				(ignored includesKey: critique rule name)
 					ifTrue: [ skipped := skipped + 1 ]
-					ifFalse: [ findings add: entity printString , ' | ' , critique rule name ] ] ] ] ].
+					ifFalse: [
+						findings add: entity printString , ' | ' , critique rule name ] ] ] ] ].
 
 out := Stdio stdout.
 findings do: [ :each | out nextPutAll: each; lf ].
