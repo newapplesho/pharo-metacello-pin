@@ -6,7 +6,7 @@ TEST_PATTERN  = MetacelloPin.*
 PHARO_VERSION = 130
 DIR          ?= ../src
 
-.PHONY: help setup load test ui check pin lock
+.PHONY: help setup load test lint ui check pin lock
 
 help:   ## Show available targets
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  make %-9s %s\n", $$1, $$2}'
@@ -20,6 +20,9 @@ load:   ## Load (or reload) the project into the Pharo image
 
 test:   ## Run tests headless
 	cd $(PHARO_DIR) && $(PHARO) test --junit-xml-output '$(TEST_PATTERN)'
+
+lint:   ## Run Pharo lint rules on the loaded project (exit 1 on a new finding)
+	cd $(PHARO_DIR) && $(PHARO) st --quit ../scripts/lint.st
 
 ui:     ## Open the Pharo GUI (World menu > Library > Metacello Pin)
 	cd $(PHARO_DIR) && ./pharo-ui Pharo.image

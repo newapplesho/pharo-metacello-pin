@@ -9,12 +9,18 @@ need it.
 make setup   # download Pharo 13 into pharo-local/
 make load    # load src/ into the image
 make test
+make lint
 make check DIR=../src
 ```
 
 `make setup PHARO_VERSION=140` downloads Pharo 14 instead. `make load` should report no
 warnings: a Tonel parse failure shows up only as a warning, and the method is then missing
 without any error.
+
+`make lint` runs the lint rules that the System Browser shows under the code (Renraku) on
+every class of this project, in the image. Run `make load` first. `scripts/lint.st` skips
+a few rules that do not fit this project, each with its reason, and exits with status 1
+when any other rule finds something.
 
 ## Following the code in the debugger
 
