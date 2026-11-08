@@ -1,0 +1,19 @@
+# Dependabot keeps the SHA-pinned GitHub Actions (and their "# vX.Y.Z" comments) up to date.
+# Metacello dependencies are not a Dependabot ecosystem; `metacello-pin` covers them
+# (see ROADMAP.md for the planned `--update` mode).
+# https://docs.github.com/code-security/dependabot/working-with-dependabot/dependabot-options-reference
+
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    # Workflow files stored in the
+    # default location of `.github/workflows`
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      time: "13:00"
+      timezone: "Asia/Tokyo"
+    cooldown:
+      default-days: 14
+    commit-message:
+      prefix: "ci"
